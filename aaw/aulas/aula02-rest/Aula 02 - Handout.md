@@ -14,9 +14,10 @@ Vocês interceptaram 6 conversas entre um app e a API de uma biblioteca. Para CA
 
 Ao final, preencham juntos a TABELA-SÍNTESE dos verbos na última página.
 
-*⏱️ Tempo: 30 minutos  |  👥 Formato: em duplas  |  Dica: o card 6 esconde uma pegadinha de quem é a culpa.*
+# ra-202451080237 — Bruno Simon Da Silva
+- Curso: ADS
+- Professor: Thalles Noce
 
-> **Nomes:** Bruno Simon Da Silva   **Turma:** ADS   **Data:** 27/08/2026
 
 ## REQUISIÇÃO 01 — A prateleira inteira
 
