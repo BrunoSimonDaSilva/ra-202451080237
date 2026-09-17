@@ -28,6 +28,16 @@ public class LivrosController : ControllerBase
     //   - Se não existir: retornar NotFound()            -> 404
     //   - Se existir:     retornar Ok(livro)             -> 200
     // Teste os DOIS casos no Postman (id 1 e id 999).
+    [HttpGet("{id}")]
+    public ActionResult<Livro> GetById(int id)
+    {
+        var livro = _repository.GetById(id);
+
+        if (livro is null)
+            return NotFound();
+
+        return Ok(livro);
+    }
 
     // PASSO 3 — POST api/livros
     // TODO: criar o livro com _repository.Create(livro).
@@ -35,11 +45,27 @@ public class LivrosController : ControllerBase
     //   - O [ApiController] já devolve 400 automaticamente quando o modelo é inválido:
     //     teste enviando um JSON sem "titulo" e observe o corpo do erro.
     // Dica: o nameof(GetById) exige que o método do Passo 2 se chame GetById.
+    [HttpPost]
+    public ActionResult<Livro> Create(Livro livro)
+    {
+        var criado = _repository.Create(livro);
+        return CreatedAtAction(nameof(GetById), new { id = criado.Id }, criado);
+    }
 
     // PASSO 4 — PUT api/livros/{id}
     // TODO: atualizar com _repository.Update(id, livro).
     //   - Se não existir: NotFound()                     -> 404
     //   - Se existir:     Ok(atualizado)                 -> 200
+    [HttpPut("{id}")]
+    public ActionResult<Livro> Update(int id, Livro livro)
+    {
+        var atualizado = _repository.Update(id, livro);
+
+        if (atualizado is null)
+            return NotFound();
+
+        return Ok(atualizado);
+    }
 
     // PASSO 5 — DELETE api/livros/{id}
     // TODO: remover com _repository.Delete(id).
@@ -47,4 +73,14 @@ public class LivrosController : ControllerBase
     //   - Se removeu:     NoContent()                    -> 204
     // Pergunta do exit ticket: o que acontece se você chamar DELETE duas vezes
     // no mesmo id? Qual status deve voltar na segunda chamada — e por quê?
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        var removido = _repository.Delete(id);
+
+        if (!removido)
+            return NotFound();
+
+        return NoContent();
+    }
 }

@@ -19,13 +19,13 @@ A API sobe em `http://localhost:5268` (Swagger UI em `/swagger`).
 
 ## Roteiro da prática (em duplas)
 
-| Passo | Endpoint | Status esperados |
-|-------|----------|------------------|
-| 1 (pronto) | `GET api/livros` | 200 |
-| 2 | `GET api/livros/{id}` | 200 / 404 |
-| 3 | `POST api/livros` | 201 + header `Location` / 400 sem `titulo` |
-| 4 | `PUT api/livros/{id}` | 200 / 404 |
-| 5 | `DELETE api/livros/{id}` | 204 / 404 |
+| Passo            | Endpoint                | Status esperados                           |
+|------------------|-------------------------|--------------------------------------------|
+| 1 (pronto)       | `GET api/livros`        | 200                                        |
+| 2                | `GET api/livros/{id}`   | 200 / 404                                  |
+| 3                | `POST api/livros`       | 201 + header `Location` / 400 sem `titulo` |
+| 4                | `PUT api/livros/{id}`   | 200 / 404                                  |
+| 5                | `DELETE api/livros/{id}`| 204 / 404                                  |
 
 Siga os comentários `// PASSO N` em `Controllers/LivrosController.cs`.
 Teste CADA caso no Postman antes de avançar — o entregável é a coleção
