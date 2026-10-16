@@ -1,0 +1,47 @@
+using System.Security.Claims;
+using BibliotecaApi.Models;
+using Microsoft.AspNetCore.Authorization;
+
+namespace BibliotecaApi.Autorizacao;
+
+// ═══════════════════════════════════════════════════════════════════
+//  ABAC — Attribute-Based Access Control
+//  A decisão olha ATRIBUTOS, não só o papel:
+//    • do SUJEITO  → id do usuário (claim NameIdentifier) e papel
+//    • do RECURSO  → quem é o dono do empréstimo (UsuarioId)
+//    • da AÇÃO     → renovar
+//  É a correção formal do IDOR que vocês exploraram na Aula 07.
+// ═══════════════════════════════════════════════════════════════════
+
+/// <summary>Requirement: "só renova o empréstimo quem tem direito sobre ELE".</summary>
+public class DonoDoEmprestimoRequirement : IAuthorizationRequirement { }
+
+/// <summary>
+/// Handler: a decisão. Regra de negócio esperada (matriz no README):
+///   - Bibliotecário renova QUALQUER empréstimo;
+///   - Leitor e Pesquisador renovam SOMENTE os PRÓPRIOS empréstimos.
+/// </summary>
+public class DonoDoEmprestimoHandler : AuthorizationHandler<DonoDoEmprestimoRequirement, Emprestimo>
+{
+    protected override Task HandleRequirementAsync(
+        AuthorizationHandlerContext context,
+        DonoDoEmprestimoRequirement requirement,
+        Emprestimo emprestimo)
+    {
+        if (context.User.IsInRole("Bibliotecario"))
+        {
+            context.Succeed(requirement);
+            return Task.CompletedTask;
+        }
+
+        var podeRenovarProprio = context.User.IsInRole("Leitor")
+            || context.User.IsInRole("Pesquisador");
+        var usuarioId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (podeRenovarProprio
+            && int.TryParse(usuarioId, out var id)
+            && id == emprestimo.UsuarioId)
+            context.Succeed(requirement);
+
+        return Task.CompletedTask;
+    }
+}
